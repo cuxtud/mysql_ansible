@@ -1,0 +1,18 @@
+---
+galaxy_info:
+  role_name: mysql
+  author: your_name
+  description: Install and configure MySQL 8
+  min_ansible_version: "2.13"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - jammy
+        - noble
+    - name: EL
+      versions:
+        - "8"
+        - "9"
+dependencies: []
+
+

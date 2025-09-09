@@ -1,0 +1,40 @@
+---
+- name: Create physical volume on {{ mysql_partition }}
+  command: pvcreate {{ mysql_partition }}
+  args:
+    creates: "{{ mysql_partition }}"
+
+- name: Create volume group {{ mysql_vg_name }}
+  command: vgcreate {{ mysql_vg_name }} {{ mysql_partition }}
+  args:
+    creates: /dev/{{ mysql_vg_name }}
+
+- name: Create logical volume {{ mysql_data_lv }} ({{ mysql_data_size | string }}G)
+  command: lvcreate -n {{ mysql_data_lv }} -L {{ mysql_data_size | string }}G {{ mysql_vg_name }}
+  args:
+    creates: /dev/{{ mysql_vg_name }}/{{ mysql_data_lv }}
+
+- name: Create logical volume {{ mysql_archive_lv }} ({{ mysql_archive_size | string }}G)
+  command: lvcreate -n {{ mysql_archive_lv }} -L {{ mysql_archive_size | string }}G {{ mysql_vg_name }}
+  args:
+    creates: /dev/{{ mysql_vg_name }}/{{ mysql_archive_lv }}
+
+- name: Create logical volume {{ mysql_backup_lv }} ({{ mysql_data_size | string }}G)
+  command: lvcreate -n {{ mysql_backup_lv }} -L {{ mysql_data_size | string }}G {{ mysql_vg_name }}
+  args:
+    creates: /dev/{{ mysql_vg_name }}/{{ mysql_backup_lv }}
+
+- name: Format MySQL data logical volume with XFS
+  filesystem:
+    fstype: xfs
+    dev: /dev/{{ mysql_vg_name }}/{{ mysql_data_lv }}
+
+- name: Format MySQL archive logical volume with XFS
+  filesystem:
+    fstype: xfs
+    dev: /dev/{{ mysql_vg_name }}/{{ mysql_archive_lv }}
+
+- name: Format MySQL backup logical volume with XFS
+  filesystem:
+    fstype: xfs
+    dev: /dev/{{ mysql_vg_name }}/{{ mysql_backup_lv }}

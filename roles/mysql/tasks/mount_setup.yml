@@ -1,0 +1,24 @@
+---
+-  name: Mount {{ mysql_data_lv }} to /u101/mysql/data
+   mount:
+     path: /u101/mysql/data
+     src: /dev/{{ mysql_vg_name }}/{{ mysql_data_lv }}
+     fstype: xfs
+     opts: defaults,noatime
+     state: mounted
+
+-  name: Mount {{ mysql_archive_lv }} to /u102/mysql/archive
+   mount:
+      path: /u102/mysql/archive
+      src: /dev/{{ mysql_vg_name }}/{{ mysql_archive_lv }}
+      fstype: xfs
+      opts: defaults,noatime
+      state: mounted
+
+-   name: Mount {{ mysql_backup_lv }} to /u103/mysql/backup
+    mount:
+      path: /u103/mysql/backup
+      src: /dev/{{ mysql_vg_name }}/{{ mysql_backup_lv }}
+      fstype: xfs
+      opts: defaults,noatime
+      state: mounted 

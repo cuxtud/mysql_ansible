@@ -1,9 +1,74 @@
 ---
-mysql_version: "8.0"
-mysql_bind_address: "127.0.0.1"
-mysql_port: 3306
-mysql_root_password: "changeMe!"
-mysql_databases: []
-mysql_users: []
 
+# Disk configuration
+mysql_disk: /dev/sdb
+mysql_partition: /dev/sdb1
 
+# Volume group and logical volumes
+mysql_vg_name: datavg
+mysql_data_lv: mysqldata
+mysql_archive_lv: mysqlarchive
+mysql_backup_lv: mysqlbackup
+
+# Logical volume sizes
+# The sizes are calculated and set in the config phase task of mysql 'Task Name: config_phase_mysql'
+mysql_data_size: "{{ morpheus['customOptions']['mysqlData'] }}"
+mysql_archive_size: "{{ (morpheus['customOptions']['mysqlData'] | int * 0.5) | int }}" # Should be 50% of data.
+mysql_backup_size: "{{ morpheus['customOptions']['mysqlData'] }}" # Backup should be same as data.
+
+# Directory paths
+mysql_data_dir: /u101/mysql/data
+mysql_archive_dir: /u102/mysql/archive
+mysql_backup_dir: /u103/mysql/backup
+
+# MySQL version (gets value from Morpheus custom options)
+mysql_version: "{{ morpheus['customOptions']['mysqlVersion'] | default(16) }}"
+
+# MySQL EL8 RPM bundle
+mysql_el8_rpm_bundle: mysql-8.0.41-1.el8.x86_64.rpm-bundle.tar
+
+# MySQL EL8 RPM packages
+mysql_el8_rpm_packages:
+  - mysql-8.0.41-1.el8.x86_64.rpm
+  - mysql-community-client-8.0.41-1.el8.x86_64.rpm
+  - mysql-community-common-8.0.41-1.el8.x86_64.rpm
+  - mysql-community-libs-8.0.41-1.el8.x86_64.rpm
+  - mysql-community-server-8.0.41-1.el8.x86_64.rpm
+  - mysql-community-devel-8.0.41-1.el8.x86_64.rpm
+  - mysql-community-test-8.0.41-1.el8.x86_64.rpm
+
+# MySQL EL9 RPM bundle
+mysql_el9_rpm_bundle: mysql-8.0.41-1.el9.x86_64.rpm-bundle.tar
+
+# MySQL EL9 RPM packages
+mysql_el9_rpm_packages:
+  - mysql-8.0.41-1.el9.x86_64.rpm
+  - mysql-community-client-8.0.41-1.el9.x86_64.rpm
+  - mysql-community-common-8.0.41-1.el9.x86_64.rpm
+  - mysql-community-libs-8.0.41-1.el9.x86_64.rpm
+  - mysql-community-server-8.0.41-1.el9.x86_64.rpm
+  - mysql-community-devel-8.0.41-1.el9.x86_64.rpm
+  - mysql-community-test-8.0.41-1.el9.x86_64.rpm
+
+# MySQL EL10 RPM bundle
+mysql_el10_rpm_bundle: mysql-8.0.41-1.el10.x86_64.rpm-bundle.tar
+
+# MySQL EL10 RPM packages
+mysql_el10_rpm_packages:
+  - mysql-8.0.41-1.el10.x86_64.rpm
+  - mysql-community-client-8.0.41-1.el10.x86_64.rpm
+  - mysql-community-common-8.0.41-1.el10.x86_64.rpm
+  - mysql-community-libs-8.0.41-1.el10.x86_64.rpm
+  - mysql-community-server-8.0.41-1.el10.x86_64.rpm
+  - mysql-community-devel-8.0.41-1.el10.x86_64.rpm
+  - mysql-community-test-8.0.41-1.el10.x86_64.rpm
+
+# Filesystem type
+mysql_fs_type: xfs
+
+# User and group for MySQL
+mysql_user: mysql
+mysql_group: mysql
+
+# MySQL configuration
+mysql_password: Welcome123 

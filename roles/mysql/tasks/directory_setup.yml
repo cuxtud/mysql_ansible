@@ -1,0 +1,18 @@
+---
+- name: Create MySQL data directory
+  file:
+    path: /u101/mysql/data
+    state: directory
+    mode: '0755'
+
+- name: Create MySQL archive directory
+  file:
+    path: /u102/mysql/archive
+    state: directory
+    mode: '0755'
+
+- name: Create MySQL backup directory
+  file:
+    path: /u103/mysql/backup
+    state: directory
+    mode: '0755'

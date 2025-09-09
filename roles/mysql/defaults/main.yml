@@ -29,7 +29,6 @@ mysql_el8_rpm_bundle: mysql-8.0.43-1.el8.x86_64.rpm-bundle.tar
 
 # MySQL EL8 RPM packages
 mysql_el8_rpm_packages:
-  - mysql-8.0.43-1.el8.x86_64.rpm
   - mysql-community-client-8.0.43-1.el8.x86_64.rpm
   - mysql-community-common-8.0.43-1.el8.x86_64.rpm
   - mysql-community-libs-8.0.43-1.el8.x86_64.rpm
@@ -42,7 +41,6 @@ mysql_el9_rpm_bundle: mysql-8.0.43-1.el9.x86_64.rpm-bundle.tar
 
 # MySQL EL9 RPM packages
 mysql_el9_rpm_packages:
-  - mysql-8.0.43-1.el9.x86_64.rpm
   - mysql-community-client-8.0.43-1.el9.x86_64.rpm
   - mysql-community-common-8.0.43-1.el9.x86_64.rpm
   - mysql-community-libs-8.0.43-1.el9.x86_64.rpm
@@ -55,7 +53,6 @@ mysql_el10_rpm_bundle: mysql-8.0.43-1.el10.x86_64.rpm-bundle.tar
 
 # MySQL EL10 RPM packages
 mysql_el10_rpm_packages:
-  - mysql-8.0.43-1.el10.x86_64.rpm
   - mysql-community-client-8.0.43-1.el10.x86_64.rpm
   - mysql-community-common-8.0.43-1.el10.x86_64.rpm
   - mysql-community-libs-8.0.43-1.el10.x86_64.rpm

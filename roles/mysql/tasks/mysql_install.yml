@@ -20,22 +20,19 @@
   loop: "{{ mysql_el10_rpm_packages }}"
   when: mysql_version == "8.0.43" and (ansible_os_family in ["RedHat", "Rocky"]) and ansible_distribution_major_version == "10"
 
-- name: Select RPM list var name by OS major version
-  ansible.builtin.set_fact:
-    mysql_rpm_packages_varname: >-
-      {{ (ansible_facts.distribution_major_version | int) == 8 and 'mysql_el8_rpm_packages' or
-         (ansible_facts.distribution_major_version | int) == 9 and 'mysql_el9_rpm_packages' or
-         'mysql_el10_rpm_packages' }}
-
 - name: Select current rpm_check fact
   ansible.builtin.set_fact:
     rpm_check_current: >-
-      {{ (ansible_facts.distribution_major_version | int) == 8 and rpm_check_el8 or
-         (ansible_facts.distribution_major_version | int) == 9 and rpm_check_el9 or
+      {{ (ansible_distribution_major_version | int) == 8 and rpm_check_el8 or
+         (ansible_distribution_major_version | int) == 9 and rpm_check_el9 or
          rpm_check_el10 }}
 
 - name: Fail if the rpm packages are not present (current OS only)
   ansible.builtin.fail:
-    msg: "{{ item }} is not present. Please ensure the rpm packages are present."
-  when: rpm_check_current.stat.exists == false
-  loop: "{{ lookup('vars', mysql_rpm_packages_varname) }}"
+    msg: "{{ item.item }} is not present. Please ensure the rpm packages are present."
+  when: 
+    - rpm_check_current.results is defined
+    - not item.stat.exists
+  loop: "{{ rpm_check_current.results }}"
+  loop_control:
+    label: "{{ item.item }}"

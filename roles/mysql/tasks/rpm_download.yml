@@ -1,5 +1,5 @@
 ---
-- name: Download Mysql 8.0.43 RPMs
+- name: Download Mysql 8.0.43 RPMs for EL8
   get_url:
     url: "https://cdn.mysql.com//Downloads/MySQL-8.0/mysql-8.0.43-1.el8.x86_64.rpm-bundle.tar"
     validate_certs: false
@@ -7,7 +7,7 @@
     mode: '0644'
   when: mysql_version == "8.0.43" and ansible_os_family == "RedHat" or ansible_os_family == "Rocky" and ansible_os_version == "8"
 
-- name: Download Mysql 8.0.43 RPMs
+- name: Download Mysql 8.0.43 RPMs for EL9
   get_url:
     url: "https://cdn.mysql.com//Downloads/MySQL-8.0/mysql-8.0.43-1.el9.x86_64.rpm-bundle.tar"
     validate_certs: false
@@ -15,7 +15,7 @@
     mode: '0644'
   when: mysql_version == "8.0.43" and ansible_os_family == "RedHat" or ansible_os_family == "Rocky" and ansible_os_version == "9"
 
-- name: Download Mysql 8.0.43 RPMs
+- name: Download Mysql 8.0.43 RPMs for EL10
   get_url:
     url: "https://cdn.mysql.com//Downloads/MySQL-8.0/mysql-8.0.43-1.el10.x86_64.rpm-bundle.tar"
     validate_certs: false
@@ -23,15 +23,15 @@
     mode: '0644'
   when: mysql_version == "8.0.43" and ansible_os_family == "RedHat" or ansible_os_family == "Rocky" and ansible_os_version == "10"
 
-- name: Extract Mysql 8.0.43 RPMs
+- name: Extract Mysql 8.0.43 RPMs for EL8
   command: tar -xvf /tmp/mysql-8.0.43-1.el8.x86_64.rpm-bundle.tar -C /tmp/
   when: mysql_version == "8.0.43" and ansible_os_family == "RedHat" or ansible_os_family == "Rocky" and ansible_os_version == "8"
 
-- name: Extract Mysql 8.0.43 RPMs
+- name: Extract Mysql 8.0.43 RPMs for EL9
   command: tar -xvf /tmp/mysql-8.0.43-1.el9.x86_64.rpm-bundle.tar -C /tmp/
   when: mysql_version == "8.0.43" and ansible_os_family == "RedHat" or ansible_os_family == "Rocky" and ansible_os_version == "9"
 
-- name: Extract Mysql 8.0.43 RPMs
+- name: Extract Mysql 8.0.43 RPMs for EL10
   command: tar -xvf /tmp/mysql-8.0.43-1.el10.x86_64.rpm-bundle.tar -C /tmp/
   when: mysql_version == "8.0.43" and ansible_os_family == "RedHat" or ansible_os_family == "Rocky" and ansible_os_version == "10"
 

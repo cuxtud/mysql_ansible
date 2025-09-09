@@ -36,3 +36,17 @@
   loop: "{{ rpm_check_current.results }}"
   loop_control:
     label: "{{ item.item }}"
+
+- name: Install the rpm packages
+  ansible.builtin.package:
+    name: "{{ item.item }}"
+    state: present
+  loop: "{{ rpm_check_current.results }}"
+  loop_control:
+    label: "{{ item.item }}"
+
+- name: Ensure the MySQL service is enabled and started
+  ansible.builtin.service:
+    name: mysql
+    enabled: true
+    state: started

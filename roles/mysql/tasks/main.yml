@@ -22,3 +22,9 @@
 
 - name: Update Service configuration
   include_tasks: service_config.yml
+
+- name: Reset Mysql root password
+  include_tasks: reset_mysql_root_password.yml
+
+- name: Include MySQL database and user creation tasks
+  include_tasks: mysql_database_user_creation.yml

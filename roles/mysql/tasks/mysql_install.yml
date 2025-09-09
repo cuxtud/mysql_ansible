@@ -37,6 +37,11 @@
   loop_control:
     label: "{{ item.item }}"
 
+- name: Import MySQL GPG key
+  ansible.builtin.rpm_key:
+    state: present
+    key: https://repo.mysql.com/RPM-GPG-KEY-mysql-2025
+
 - name: Install the rpm packages
   ansible.builtin.package:
     name: "{{ item.item }}"

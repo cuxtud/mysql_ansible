@@ -50,8 +50,7 @@
   loop_control:
     label: "{{ item.item }}"
 
-- name: Ensure the MySQL service is enabled and started
+- name: Ensure the MySQL service is enabled
   ansible.builtin.service:
     name: mysqld
     enabled: true
-    state: started

@@ -74,4 +74,4 @@ mysql_user: mysql
 mysql_group: mysql
 
 # MySQL configuration
-mysql_password: Welcome123 
+mysql_new_password: "{{ lookup('cypher','secret=password/mysqlpass') }}"

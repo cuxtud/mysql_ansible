@@ -63,7 +63,7 @@
     state: present
     check_implicit_admin: true
   when: mysql_temp_password.stdout != ""
-  no_log: true
+  #no_log: true
 
 - name: Flush privileges
   mysql_query:

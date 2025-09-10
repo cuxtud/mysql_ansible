@@ -16,3 +16,15 @@
     path: /u103/mysql/backup
     state: directory
     mode: '0755'
+
+- name: Create MySQL log directory
+  file:
+    path: /u101/mysql/data/log
+    state: directory
+    mode: '0755'
+
+- name: Create archive log bin directory
+  file:
+    path: /u102/mysql/archive/logbin
+    state: directory
+    mode: '0755'

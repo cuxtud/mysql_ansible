@@ -29,6 +29,17 @@ ansible-playbook playbooks/mysql.yml -i <your_inventory>
 
 Override variables as needed via `-e` or by editing `roles/mysql/defaults/main.yml`.
 
+### Task breakdown
+
+- `disk_setup.yml`: Partition and prepare `mysql_disk` → `mysql_partition`.
+- `lvm_setup.yml`: Create VG `mysql_vg_name` and LVs (`mysql_data_lv`, `mysql_archive_lv`, `mysql_backup_lv`) with sizes from `mysql_*_size`.
+- `mount_setup.yml`: Format (`mysql_fs_type`) and mount to `mysql_*_dir` paths.
+- `directory_setup.yml`: Ensure directory structure and permissions for MySQL.
+- `rpm_download.yml`: Optionally fetch/place required RPMs per EL version.
+- `mysql_install.yml`: Verify RPM presence for current OS major and install packages.
+- `mysql_config.yml`: Drop `my.cnf`, initialize data dirs, and configure service.
+- `mysql_database_user_creation.yml`: Optionally create databases/users when provided.
+
 ### Variables
 
 Core (RPM and OS targeting):
@@ -59,10 +70,16 @@ MySQL basics:
 - `mysql_password`: root/admin password
 - Optional: `mysql_databases` (list), `mysql_users` (list)
 
+Morpheus-driven options (if applicable):
+
+- `morpheus.customOptions.mysqlData`: used to derive `mysql_data_size`, `mysql_archive_size` (50%), `mysql_backup_size` (100%).
+- `morpheus.customOptions.mysqlVersion`: used to set `mysql_version`.
+
 ### Notes
 
 - This role is focused on EL8. It resolves RPM lists per EL major to avoid cross-version package mixing.
 - Ensure the required RPMs are available (either pre-staged on the host, via your repository, or downloaded by the role's RPM tasks if configured).
+  - The role checks RPM presence only for the host's EL major (e.g., EL8 checks `mysql_el8_rpm_packages`).
 
 ### Example inventory
 

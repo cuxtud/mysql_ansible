@@ -75,3 +75,8 @@ mysql_group: mysql
 
 # MySQL configuration
 mysql_new_password: "{{ lookup('cypher','secret=password/mysqlpass') }}"
+
+# MySQL database and user creation
+mysql_user_db: "{{morpheus['customOptions']['mysqlUserDb']}}"
+mysql_user_name: "{{morpheus['customOptions']['mysqlUserName']}}"
+mysql_user_password: "{{morpheus['customOptions']['mysqlUserPassword']}}"

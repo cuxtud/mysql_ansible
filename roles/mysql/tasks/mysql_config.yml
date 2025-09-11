@@ -55,7 +55,12 @@
     query: "SELECT 1"
   register: mysql_new_pwd_test
   failed_when: false
-  no_log: true
+  #no_log: true
+  changed_when: false
+
+- name: Debug result of new password check
+  debug:
+    var: mysql_new_pwd_test
 
 - name: Extract temporary password from MySQL log
   shell: grep 'temporary password' /u101/mysql/data/log/mysqld.log | awk '{print $NF}' | tr -d '\n\r'
@@ -70,7 +75,7 @@
     - mysql_new_pwd_test.failed
     - mysql_temp_password.stdout is defined and mysql_temp_password.stdout | length > 0
   no_log: true
-  notify: "Confirm password reset"
+  #notify: "Confirm password reset"
 
 - name: Install Python3-PyMSQL 
   ansible.builtin.package:

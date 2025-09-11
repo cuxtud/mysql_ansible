@@ -72,22 +72,19 @@
     - mysql_temp_password.stdout != ""
   no_log: true
 
+- name: Install Python3-PyMSQL 
+  ansible.builtin.package:
+    name: python3-PyMySQL
+    state: present
+
 - name: Flush privileges
   mysql_query:
     login_user: root
     login_password: "{{ mysql_new_password }}"
     query: "FLUSH PRIVILEGES;"
-  when: mysql_temp_password.stdout != ""
-
-- name: Test connection with new password
-  community.mysql.mysql_query:
-    login_user: root
-    login_password: "{{ mysql_new_password }}"
-    query: "SHOW DATABASES;"
-  register: mysql_test_connection
-  when: mysql_temp_password.stdout != ""
+  when: mysql_new_pwd_test.failed
 
 - name: Confirm password reset success
   debug:
     msg: "MySQL root password successfully reset"
-  when: mysql_test_connection is succeeded
+  when: mysql_new_pwd_test.failed

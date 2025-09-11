@@ -66,13 +66,13 @@
   shell: grep 'temporary password' /u101/mysql/data/log/mysqld.log | awk '{print $NF}' | tr -d '\n\r'
   register: mysql_temp_password
   changed_when: false
-  when: mysql_new_pwd_test.failed
+  when: "'Access denied' in mysql_new_pwd_test.msg"
 
 - name: Reset MySQL root password with temporary password
   shell: |
     mysql -u root -p'{{ mysql_temp_password.stdout }}' --connect-expired-password -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '{{ mysql_new_password }}'; FLUSH PRIVILEGES;"
   when:
-    - mysql_new_pwd_test.failed
+    - "'Access denied' in mysql_new_pwd_test.msg"
     - mysql_temp_password.stdout is defined and mysql_temp_password.stdout | length > 0
   no_log: true
   #notify: "Confirm password reset"
@@ -92,4 +92,4 @@
 - name: Confirm password reset success
   debug:
     msg: "MySQL root password successfully reset"
-  when: mysql_new_pwd_test.failed
+  when: "'Access denied' in mysql_new_pwd_test.msg"

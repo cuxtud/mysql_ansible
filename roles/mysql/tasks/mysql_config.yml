@@ -53,10 +53,21 @@
   register: mysql_temp_password
   changed_when: false
 
-- name: Reset MySQL root password
+- name: Try to connect with new password
+  mysql_query:
+    login_user: root
+    login_password: "{{ mysql_new_password }}"
+    query: "SELECT 1"
+  register: mysql_new_pwd_test
+  failed_when: false
+  no_log: true
+
+- name: Reset MySQL root password (if needed)
   shell: |
     mysql -u root -p'{{ mysql_temp_password.stdout }}' --connect-expired-password -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '{{ mysql_new_password }}';"
-  when: mysql_temp_password.stdout != ""
+  when: 
+    - mysql_new_pwd_test.failed
+    - mysql_temp_password.stdout != ""
   no_log: true
 
 - name: Flush privileges

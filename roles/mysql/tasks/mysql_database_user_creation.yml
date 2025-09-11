@@ -16,9 +16,3 @@
     check_implicit_admin: false
     login_user: root
     login_password: "{{ mysql_new_password }}"
-
-- name: Flush privileges
-  mysql_query:
-    login_user: root
-    login_password: "{{ mysql_new_password }}"
-    query: "FLUSH PRIVILEGES;"

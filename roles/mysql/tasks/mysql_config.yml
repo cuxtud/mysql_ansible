@@ -48,12 +48,7 @@
     state: started
     enabled: true
 
-- name: Extract temporary password from MySQL log
-  shell: grep 'temporary password' /u101/mysql/data/log/mysqld.log | awk '{print $NF}' | tr -d '\n\r'
-  register: mysql_temp_password
-  changed_when: false
-
-- name: Try to connect with new password
+- name: Check if new password already works
   community.mysql.mysql_query:
     login_user: root
     login_password: "{{ mysql_new_password }}"
@@ -62,22 +57,20 @@
   failed_when: false
   no_log: true
 
-- name: Debug password extraction and test results
-  debug:
-    msg: |
-      Temp password: "{{ mysql_temp_password.stdout }}"
-      Temp password length: {{ mysql_temp_password.stdout | length }}
-      New password test failed: {{ mysql_new_pwd_test.failed }}
-      New password test result: {{ mysql_new_pwd_test }}
+- name: Extract temporary password from MySQL log
+  shell: grep 'temporary password' /u101/mysql/data/log/mysqld.log | awk '{print $NF}' | tr -d '\n\r'
+  register: mysql_temp_password
+  changed_when: false
+  when: mysql_new_pwd_test.failed
 
-- name: Reset MySQL root password
+- name: Reset MySQL root password with temporary password
   shell: |
     mysql -u root -p'{{ mysql_temp_password.stdout }}' --connect-expired-password -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '{{ mysql_new_password }}'; FLUSH PRIVILEGES;"
-  when: 
+  when:
     - mysql_new_pwd_test.failed
-    - mysql_temp_password.stdout != ""
-    - mysql_temp_password.stdout | length > 0
+    - mysql_temp_password.stdout is defined and mysql_temp_password.stdout | length > 0
   no_log: true
+  notify: "Confirm password reset"
 
 - name: Install Python3-PyMSQL 
   ansible.builtin.package:
@@ -85,7 +78,7 @@
     state: present
 
 - name: Flush privileges
-  mysql_query:
+  community.mysql.mysql_query:
     login_user: root
     login_password: "{{ mysql_new_password }}"
     query: "FLUSH PRIVILEGES;"

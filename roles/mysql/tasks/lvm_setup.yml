@@ -24,6 +24,15 @@
   args:
     creates: /dev/{{ mysql_vg_name }}/{{ mysql_backup_lv }}
 
+- name: Ensure LV usr is 10G and grow filesystem (RHEL only)
+  when: ansible_facts['os_family'] == 'RedHat'
+  ansible.builtin.lvol:
+    vg: vrgp00
+    lv: usr
+    size: 10g
+    resizefs: yes
+    state: present
+
 - name: Format MySQL data logical volume with XFS
   filesystem:
     fstype: xfs

@@ -46,7 +46,7 @@ See `roles/mysql/defaults/main.yml` for the authoritative list.
 
 ### RPM & Version Matrix
 
-- **8.0.43**: downloads from `cdn.mysql.com` and supports EL8/EL9/EL10.
+- **8.0.43**: downloads from the internal AZ Artifact repository and supports EL8/EL9.
 - **8.4.3**: downloads from the internal AZ Artifact repository and supports EL8/EL9.
 
 The install logic only checks/installs packages for the host's `ansible_distribution_major_version`, preventing cross-version contamination.

@@ -1,4 +1,12 @@
 ---
+- name: Include vars for MySQL 8.0.43
+  include_vars: "../vars/8.0.43.yml"
+  when: mysql_version == "8.0.43"
+
+- name: Include vars for MySQL 8.4.3
+  include_vars: "../vars/8.4.3.yml"
+  when: mysql_version == "8.4.3"
+  
 - name: Include disk setup tasks
   include_tasks: disk_setup.yml
 
@@ -16,6 +24,9 @@
 
 - name: Include MySQL installation tasks
   include_tasks: mysql_install.yml
+
+- name: Include Mysql set directory ownership
+  include_tasks: mysql_set_ownership.yml
 
 - name: Include MySQL configuration tasks
   include_tasks: mysql_config.yml

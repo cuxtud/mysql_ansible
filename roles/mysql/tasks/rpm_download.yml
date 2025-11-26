@@ -24,7 +24,22 @@
         dest: /tmp/
         mode: '0644'
       when: mysql_version == "8.0.43" and (ansible_os_family in ["RedHat", "Rocky"]) and ansible_distribution_major_version == "10"
-  
+
+    - name: Download Mysql 8.4.3 RPMs for EL8
+      get_url:
+        url: "https://azmphedge.astrazeneca.net/public-archives/download/Artifact/mysql-8.4.3-1.el8.x86_64.rpm-bundle.tar"
+        validate_certs: false
+        dest: /tmp/
+        mode: '0644'
+      when: mysql_version == "8.4.3" and (ansible_os_family in ["RedHat", "Rocky"]) and ansible_distribution_major_version == "8"
+
+    - name: Download Mysql 8.4.3 RPMs for EL9
+      get_url:
+        url: "https://azmphedge.astrazeneca.net/public-archives/download/Artifact/mysql-8.4.3-1.el9.x86_64.rpm-bundle.tar"
+        validate_certs: false
+        dest: /tmp/
+        mode: '0644'
+      when: mysql_version == "8.4.3" and (ansible_os_family in ["RedHat", "Rocky"]) and ansible_distribution_major_version == "9"
   environment: "{{ proxy_env }}"
 
 - name: Extract Mysql 8.0.43 RPMs for EL8
@@ -39,3 +54,10 @@
   command: tar -xvf /tmp/mysql-8.0.43-1.el10.x86_64.rpm-bundle.tar -C /tmp/
   when: mysql_version == "8.0.43" and (ansible_os_family in ["RedHat", "Rocky"]) and ansible_distribution_major_version == "10"
 
+- name: Extract Mysql 8.4.3 RPMs for EL8
+  command: tar -xvf /tmp/mysql-8.4.3-1.el8.x86_64.rpm-bundle.tar -C /tmp/
+  when: mysql_version == "8.4.3" and (ansible_os_family in ["RedHat", "Rocky"]) and ansible_distribution_major_version == "8"
+
+- name: Extract Mysql 8.4.3 RPMs for EL9
+  command: tar -xvf /tmp/mysql-8.4.3-1.el9.x86_64.rpm-bundle.tar -C /tmp/
+  when: mysql_version == "8.4.3" and (ansible_os_family in ["RedHat", "Rocky"]) and ansible_distribution_major_version == "9"

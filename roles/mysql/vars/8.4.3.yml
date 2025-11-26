@@ -1,0 +1,27 @@
+---
+
+# MySQL 8.4.3 specific RPM bundle names per EL version
+mysql_el8_rpm_bundle: mysql-8.4.3-1.el8.x86_64.rpm-bundle.tar
+mysql_el9_rpm_bundle: mysql-8.4.3-1.el9.x86_64.rpm-bundle.tar
+
+# MySQL 8.4.3 specific RPM package lists per EL version
+mysql_el8_rpm_packages:
+  - mysql-community-common-8.4.3-1.el8.x86_64.rpm
+  - mysql-community-client-plugins-8.4.3-1.el8.x86_64.rpm
+  - mysql-community-libs-8.4.3-1.el8.x86_64.rpm
+  - mysql-community-icu-data-files-8.4.3-1.el8.x86_64.rpm
+  - mysql-community-client-8.4.3-1.el8.x86_64.rpm
+  - mysql-community-server-8.4.3-1.el8.x86_64.rpm
+  - mysql-community-devel-8.4.3-1.el8.x86_64.rpm
+  - mysql-community-test-8.4.3-1.el8.x86_64.rpm
+
+mysql_el9_rpm_packages:
+  - mysql-community-client-plugins-8.4.3-1.el9.x86_64.rpm
+  - mysql-community-common-8.4.3-1.el9.x86_64.rpm
+  - mysql-community-devel-8.4.3-1.el9.x86_64.rpm
+  - mysql-community-icu-data-files-8.4.3-1.el9.x86_64.rpm
+  - mysql-community-libs-8.4.3-1.el9.x86_64.rpm
+  - mysql-community-server-8.4.3-1.el9.x86_64.rpm
+  - mysql-community-test-8.4.3-1.el9.x86_64.rpm
+
+

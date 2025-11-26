@@ -27,7 +27,7 @@
 - name: Ensure LV usr is 10G and grow filesystem (RHEL only)
   when: ansible_facts['os_family'] == 'RedHat'
   ansible.builtin.lvol:
-    vg: vrgp00
+    vg: vgrp00
     lv: usr
     size: 10g
     resizefs: yes

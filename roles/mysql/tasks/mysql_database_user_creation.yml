@@ -31,3 +31,49 @@
     login_user: root
     login_password: "{{ mysql_new_password }}"
     login_host: localhost
+    host: "%"
+  when: mysql_version == "8.0.43"
+
+- name: Create MySQL user
+  mysql_user:
+    name: "{{ mysql_user_name }}"
+    plugin: caching_sha2_password
+    plugin_auth_string: "{{ mysql_user_password }}"
+    priv: "{{ mysql_user_db }}.*:ALL"
+    state: present
+    update_password: always
+    check_implicit_admin: false
+    login_user: root
+    login_password: "{{ mysql_new_password }}"
+    login_host: localhost
+    host: "%"
+  when: mysql_version == "8.4.3"
+
+- name: Create MySQL azbackup user and grant all privileges on all databases
+  community.mysql.mysql_user:
+    name: "{{ mysql_backup_user }}"
+    password: "{{ mysql_backup_user_password }}"
+    priv: '*.*:ALL'
+    state: present
+    update_password: always
+    check_implicit_admin: false
+    login_user: root
+    login_password: "{{ mysql_new_password }}"
+    login_host: localhost
+    host: "%"
+  when: mysql_version == "8.0.43"
+
+- name: Create MySQL azbackup user and grant all privileges on all databases
+  community.mysql.mysql_user:
+    name: "{{ mysql_backup_user }}"
+    plugin: caching_sha2_password
+    plugin_auth_string: "{{ mysql_user_password }}"
+    priv: '*.*:ALL'
+    state: present
+    update_password: always
+    check_implicit_admin: false
+    login_user: root
+    login_password: "{{ mysql_new_password }}"
+    login_host: localhost
+    host: "%"
+  when: mysql_version == "8.4.3"

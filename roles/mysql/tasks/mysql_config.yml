@@ -1,39 +1,20 @@
 ---
-- name: Set ownership of MySQL data directory
-  file:
-    path: /u101/mysql/data
-    owner: mysql
-    group: mysql
-    recurse: true
-
-- name: Set ownership of MySQL archive directory
-  file:
-    path: /u102/mysql/archive
-    owner: mysql
-    group: mysql
-    recurse: true
-
-- name: Set ownership of MySQL backup directory
-  file:
-    path: /u103/mysql/backup
-    owner: mysql
-    group: mysql
-    recurse: true
-
-- name: Set ownership of MySQL log directory
+- name: Create log directory
   file:
     path: /u101/mysql/data/log
+    state: directory
     owner: mysql
     group: mysql
-    recurse: true
+    mode: '0755'
 
-- name: Set ownership of archive log bin directory
+- name: Create archive log bin directory
   file:
-    path: /u102/mysql/archive/logbin
+    path: /u102/mysql/archive/binlog
+    state: directory
     owner: mysql
     group: mysql
-    recurse: true
-
+    mode: '0755'
+    
 - name: Copy MySQL configuration file
   copy:
     src: my.cnf
@@ -73,13 +54,38 @@
   changed_when: false
   when: "'Access denied' in mysql_new_pwd_test.msg"
 
-- name: Reset MySQL root password with temporary password
+- name: Wait for MySQL socket to be ready
+  wait_for:
+    path: /var/lib/mysql/mysql.sock
+    state: present
+    timeout: 30
+
+- name: Check if /root/.my.cnf exists
+  stat:
+    path: /root/.my.cnf
+  register: my_cnf_file
+
+- name: Update MySQL root Password
   shell: |
-    mysql -u root -p'{{ mysql_temp_password.stdout }}' --connect-expired-password -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '{{ mysql_new_password }}'; FLUSH PRIVILEGES;"
-  when:
-    - "'Access denied' in mysql_new_pwd_test.msg"
-    - mysql_temp_password.stdout is defined and mysql_temp_password.stdout | length > 0
-  no_log: true
+    mysql -u root -p"{{ mysql_temp_password.stdout }}" --connect-expired-password -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '{{ mysql_new_password }}';"
+  when: my_cnf_file.stat.exists == False
+
+- name: Create the MySQL (/root/.my.cnf) config file
+  copy:
+    dest: /root/.my.cnf
+    content: |
+      [client]
+      user=root
+      password={{ mysql_new_password }}
+  when: ansible_facts['distribution'] in ['RedHat', 'CentOS', 'AlmaLinux', 'Rocky']
+    
+#- name: Reset MySQL root password with temporary password
+#  shell: |
+#    mysql -u root -p'{{ mysql_temp_password.stdout }}' --connect-expired-password -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY '{{ mysql_new_password }}'; FLUSH PRIVILEGES;"
+#  when:
+#    - "'Access denied' in mysql_new_pwd_test.msg"
+#    - mysql_temp_password.stdout is defined and mysql_temp_password.stdout | length > 0
+#  no_log: true
   #notify: "Confirm password reset"
 
 - name: Flush privileges
@@ -93,3 +99,8 @@
   debug:
     msg: "MySQL root password successfully reset"
   when: "'Access denied' in mysql_new_pwd_test.msg"
+
+- name: Set MySQL user shell to /bin/bash
+  user:
+    name: mysql
+    shell: /bin/bash

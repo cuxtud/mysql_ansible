@@ -1,0 +1,11 @@
+---
+- name: Create MySQL directories
+  file:
+    path: "{{ item.path }}"
+    owner: "{{ item.owner | default('mysql') }}"
+    group: "{{ item.group | default('mysql') }}"
+    recurse: true
+  with_items:
+    - { path: '/u101/' }
+    - { path: '/u102/' }
+    - { path: '/u103/' }

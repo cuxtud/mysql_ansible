@@ -1,30 +1,13 @@
 ---
-- name: Create MySQL data directory
+- name: Create required MySQL directories
   file:
-    path: /u101/mysql/data
+    path: "{{ item.path }}"
     state: directory
     mode: '0755'
-
-- name: Create MySQL archive directory
-  file:
-    path: /u102/mysql/archive
-    state: directory
-    mode: '0755'
-
-- name: Create MySQL backup directory
-  file:
-    path: /u103/mysql/backup
-    state: directory
-    mode: '0755'
-
-- name: Create MySQL log directory
-  file:
-    path: /u101/mysql/data/log
-    state: directory
-    mode: '0755'
-
-- name: Create archive log bin directory
-  file:
-    path: /u102/mysql/archive/logbin
-    state: directory
-    mode: '0755'
+  with_items:
+    - { path: '/u101/mysql/data' }
+    - { path: '/u101/mysql/data/log' }
+    - { path: '/u101/mysql/data/database' }
+    - { path: '/u102/mysql/archive' }
+    - { path: '/u102/mysql/archive/binlog' }
+    - { path: '/u103/mysql/backup' }

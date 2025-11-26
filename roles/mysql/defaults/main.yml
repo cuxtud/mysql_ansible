@@ -22,49 +22,7 @@ mysql_archive_dir: /u102/mysql/archive
 mysql_backup_dir: /u103/mysql/backup
 
 # MySQL version (gets value from Morpheus custom options)
-mysql_version: "{{ morpheus['customOptions']['mysqlVersion'] | default(16) }}"
-
-# MySQL EL8 RPM bundle
-mysql_el8_rpm_bundle: mysql-8.0.43-1.el8.x86_64.rpm-bundle.tar
-
-# MySQL EL8 RPM packages
-mysql_el8_rpm_packages:
-  - mysql-community-common-8.0.43-1.el8.x86_64.rpm
-  - mysql-community-client-plugins-8.0.43-1.el8.x86_64.rpm
-  - mysql-community-libs-8.0.43-1.el8.x86_64.rpm
-  - mysql-community-icu-data-files-8.0.43-1.el8.x86_64.rpm
-  - mysql-community-client-8.0.43-1.el8.x86_64.rpm
-  - mysql-community-server-8.0.43-1.el8.x86_64.rpm
-  - mysql-community-devel-8.0.43-1.el8.x86_64.rpm
-  - mysql-community-test-8.0.43-1.el8.x86_64.rpm 
-
-# MySQL EL9 RPM bundle
-mysql_el9_rpm_bundle: mysql-8.0.43-1.el9.x86_64.rpm-bundle.tar
-
-# MySQL EL9 RPM packages
-mysql_el9_rpm_packages:
-  - mysql-community-common-8.0.43-1.el9.x86_64.rpm
-  - mysql-community-client-plugins-8.0.43-1.el9.x86_64.rpm
-  - mysql-community-libs-8.0.43-1.el9.x86_64.rpm
-  - mysql-community-icu-data-files-8.0.43-1.el9.x86_64.rpm
-  - mysql-community-client-8.0.43-1.el9.x86_64.rpm
-  - mysql-community-server-8.0.43-1.el9.x86_64.rpm
-  - mysql-community-devel-8.0.43-1.el9.x86_64.rpm
-  - mysql-community-test-8.0.43-1.el9.x86_64.rpm
-
-# MySQL EL10 RPM bundle
-mysql_el10_rpm_bundle: mysql-8.0.43-1.el10.x86_64.rpm-bundle.tar
-
-# MySQL EL10 RPM packages
-mysql_el10_rpm_packages:
-  - mysql-community-common-8.0.43-1.el10.x86_64.rpm
-  - mysql-community-client-plugins-8.0.43-1.el10.x86_64.rpm
-  - mysql-community-libs-8.0.43-1.el10.x86_64.rpm
-  - mysql-community-icu-data-files-8.0.43-1.el10.x86_64.rpm
-  - mysql-community-client-8.0.43-1.el10.x86_64.rpm
-  - mysql-community-devel-8.0.43-1.el10.x86_64.rpm
-  - mysql-community-server-8.0.43-1.el10.x86_64.rpm
-  - mysql-community-test-8.0.43-1.el10.x86_64.rpm
+mysql_version: "{{ morpheus['customOptions']['mysqlVersion'] | default(8.0.43) }}"
 
 # Filesystem type
 mysql_fs_type: xfs
@@ -76,7 +34,26 @@ mysql_group: mysql
 # MySQL configuration
 mysql_new_password: "{{ lookup('cypher','secret=secret/mysqlpass') }}"
 
+# MySQL Backup user
+mysql_backup_user: "azbackup"
+mysql_backup_user_password: "{{ lookup('cypher','secret=secret/mysqlbackupuserpass') }}"
+
 # MySQL database and user creation
 mysql_user_db: "{{morpheus['customOptions']['mysqlUserDb']}}"
 mysql_user_name: "{{morpheus['customOptions']['mysqlUserName']}}"
 mysql_user_password: "{{morpheus['customOptions']['mysqlUserPassword']}}"
+
+# Proxy
+proxy_env:
+  http_proxy: http://azpzen.astrazeneca.net:9480
+  https_proxy: http://azpzen.astrazeneca.net:9480
+  no_proxy: 127.0.0.1,localhost,157.96.177.181,astrazeneca.net
+  HTTP_PROXY: http://azpzen.astrazeneca.net:9480
+  HTTPS_PROXY: http://azpzen.astrazeneca.net:9480
+  NO_PROXY: 127.0.0.1,localhost,157.96.177.181,astrazeneca.net
+
+mysql_req_packages:
+  - net-tools
+  - openssl-devel
+  - perl-JSON
+  - perl-core
